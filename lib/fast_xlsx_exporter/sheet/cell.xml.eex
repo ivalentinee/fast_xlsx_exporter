@@ -1,0 +1,1 @@
+<c r="<%= id %>" s="<%= style %>" t="<%= type %>"><v><%= value %></v></c>
