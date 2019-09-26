@@ -3,14 +3,14 @@ defmodule FastXlsxExporter.SharedStrings do
 
   @path Path.join(["xl", "sharedStrings.xml"])
 
-  EEx.function_from_file(:defp, :render_start, "#{__DIR__}/shared_strings/start.xml.eex", [:count])
+  EEx.function_from_file(:defp, :render_start, "#{__DIR__}/shared_strings/start.xml.eex", [])
   EEx.function_from_file(:defp, :render_end, "#{__DIR__}/shared_strings/end.xml.eex", [])
   EEx.function_from_file(:defp, :render_value, "#{__DIR__}/shared_strings/value.xml.eex", [:value])
 
   def initialize(base_path) do
     {:ok, fd} = fd(base_path)
     :file.truncate(fd)
-    strings_start = render_start(0)
+    strings_start = render_start()
     :file.write(fd, strings_start)
     {fd, 0}
   end

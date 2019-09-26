@@ -1,1 +1,1 @@
-<si><t xml:space="preserve"><%= value %></t></si>
+<si><t><%= value %></t></si>

@@ -1,1 +1,1 @@
-<row r="<%= index %>" customFormat="false" ht="12.8" hidden="false" customHeight="false" outlineLevel="0" collapsed="false"><%= content %></row>
+<row r="<%= index %>" spans="1:26" x14ac:dyDescent="0.35"><%= content %></row>

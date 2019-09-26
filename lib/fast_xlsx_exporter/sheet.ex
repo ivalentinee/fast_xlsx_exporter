@@ -1,13 +1,11 @@
 defmodule FastXlsxExporter.Sheet do
   require EEx
   import FastXlsxExporter.Sheet.ColumnIds
-  alias FastXlsxExporter.{SharedStrings, Styles}
+  alias FastXlsxExporter.{SharedStrings, Sheet.Cell, Styles}
 
   @path Path.join(["xl", "worksheets", "sheet1.xml"])
-  @seconds_per_day 86400
 
   EEx.function_from_file(:defp, :render_row, "#{__DIR__}/sheet/row.xml.eex", [:index, :content])
-  EEx.function_from_file(:defp, :render_cell, "#{__DIR__}/sheet/cell.xml.eex", [:id, :value, :style, :type])
   EEx.function_from_file(:defp, :render_start, "#{__DIR__}/sheet/start.xml.eex", [:dimensions])
   EEx.function_from_file(:defp, :render_end, "#{__DIR__}/sheet/end.xml.eex", [])
 
@@ -73,7 +71,7 @@ defmodule FastXlsxExporter.Sheet do
 
   defp cell(row_index, column_index, value) do
     id = id(row_index, column_index)
-    render_cell(id, format(value), style(value), type(value))
+    Cell.render(id, value)
   end
 
   defp fd(base_path) do
@@ -84,28 +82,4 @@ defmodule FastXlsxExporter.Sheet do
   defp id(row_index, column_index) do
     "#{Enum.at(column_ids(), column_index - 1)}#{row_index}"
   end
-
-  defp format({value, _}) when is_number(value), do: value
-  defp format({value, _}) when is_binary(value), do: value
-  defp format({%Date{} = value, _}), do: Date.diff(~D[1899-12-30], value)
-
-  defp format({%NaiveDateTime{} = value, _}) do
-    date = NaiveDateTime.to_date(value)
-    date_chunk = Date.diff(date, ~D[1899-12-30])
-    time = Time.diff(~T[00:00:00], NaiveDateTime.to_time(value))
-    time_chunk = time / @seconds_per_day
-
-    date_chunk + time_chunk
-  end
-
-  defp style({value, :percents}) when is_number(value), do: 1
-  defp style({value, _}) when is_number(value), do: 0
-  defp style({value, _}) when is_binary(value), do: 0
-  defp style({%Date{}, _}), do: 2
-  defp style({%NaiveDateTime{}, _}), do: 3
-
-  defp type({value, _}) when is_number(value), do: "n"
-  defp type({value, _}) when is_binary(value), do: "s"
-  defp type({%Date{}, _}), do: "n"
-  defp type({%NaiveDateTime{}, _}), do: "n"
 end
