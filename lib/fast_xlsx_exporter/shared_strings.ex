@@ -5,6 +5,7 @@ defmodule FastXlsxExporter.SharedStrings do
 
   EEx.function_from_file(:defp, :render_start, "#{__DIR__}/shared_strings/start.xml.eex", [])
   EEx.function_from_file(:defp, :render_end, "#{__DIR__}/shared_strings/end.xml.eex", [])
+
   EEx.function_from_file(:defp, :render_value, "#{__DIR__}/shared_strings/value.xml.eex", [:value])
 
   def initialize(base_path) do

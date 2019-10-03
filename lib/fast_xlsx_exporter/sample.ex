@@ -25,7 +25,6 @@ defmodule FastXlsxExporter.Sample do
   end)
 
   def write(base_path) do
-
     make_dirs(base_path)
     write_files(base_path)
   end
