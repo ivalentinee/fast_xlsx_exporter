@@ -15,7 +15,7 @@ defmodule FastXlsxExporter.Sheet.Cell do
 
   defp format_datetime(%NaiveDateTime{} = value) do
     date = NaiveDateTime.to_date(value)
-    date_chunk = Date.diff(date, ~D[1899-12-30])
+    date_chunk = Date.diff(date, ~D[1900-01-01])
     time = Time.diff(~T[00:00:00], NaiveDateTime.to_time(value))
     time_chunk = time / @seconds_per_day
 
