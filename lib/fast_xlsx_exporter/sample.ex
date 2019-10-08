@@ -1,4 +1,5 @@
 defmodule FastXlsxExporter.Sample do
+  @moduledoc false
   require EEx
 
   @template_prefix "#{__DIR__}/sample/"

@@ -1,4 +1,6 @@
 defmodule FastXlsxExporter.Sheet.Cell do
+  @moduledoc false
+
   require EEx
 
   alias FastXlsxExporter.Sheet.DateTimeFormatter

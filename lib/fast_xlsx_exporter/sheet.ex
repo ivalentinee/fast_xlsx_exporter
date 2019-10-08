@@ -1,4 +1,6 @@
 defmodule FastXlsxExporter.Sheet do
+  @moduledoc false
+
   require EEx
   import FastXlsxExporter.Sheet.ColumnIds
   alias FastXlsxExporter.{SharedStrings, Sheet.Cell, Styles}

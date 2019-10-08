@@ -1,4 +1,6 @@
 defmodule FastXlsxExporter.Sheet.ColumnIds do
+  @moduledoc false
+
   @column_ids [
     "A",
     "B",

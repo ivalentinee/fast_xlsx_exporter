@@ -1,4 +1,6 @@
 defmodule FastXlsxExporter.SharedStrings do
+  @moduledoc false
+
   require EEx
 
   @path Path.join(["xl", "sharedStrings.xml"])

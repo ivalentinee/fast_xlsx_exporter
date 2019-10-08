@@ -1,4 +1,6 @@
 defmodule FastXlsxExporter.Styles do
+  @moduledoc false
+
   require EEx
 
   @path Path.join(["xl", "styles.xml"])

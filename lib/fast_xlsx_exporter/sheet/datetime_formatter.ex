@@ -1,4 +1,6 @@
 defmodule FastXlsxExporter.Sheet.DateTimeFormatter do
+  @moduledoc false
+
   @initial_date ~D[1900-01-01]
   @initial_time ~T[00:00:00]
   @seconds_per_day 86400
