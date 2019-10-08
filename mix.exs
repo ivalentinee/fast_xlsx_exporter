@@ -6,6 +6,7 @@ defmodule FastXlsxExporter.MixProject do
       app: :fast_xlsx_exporter,
       version: "0.1.0",
       elixir: "~> 1.8",
+      description: "Fast xlsx table exporter",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),

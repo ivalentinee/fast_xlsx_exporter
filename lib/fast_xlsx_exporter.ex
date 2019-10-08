@@ -2,6 +2,20 @@ defmodule FastXlsxExporter do
   @moduledoc """
   # Fast XLSX Exporter
 
+  ## Installation
+
+  Add `fast_xlsx_exporter` to your mix.ex deps:
+
+  ```elixir
+  def deps do
+    [
+      {:fast_xlsx_exporter, "~> 0.1.0"}
+    ]
+  end
+  ```
+
+  ## Explanation
+
   [Elixlsx](https://github.com/xou/elixlsx) was fine, until really huge exports appeared. Then it took more and more time to generate xlsx reports. And RAM.
 
   So, being really primitive (8 hour at night from scratch knowing nothing about xlsx) this library does not store document in memory. It writes straight to file system.
