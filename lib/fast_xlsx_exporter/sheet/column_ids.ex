@@ -1,7 +1,7 @@
 defmodule FastXlsxExporter.Sheet.ColumnIds do
   @moduledoc false
 
-  @column_ids [
+  @letters [
     "A",
     "B",
     "C",
@@ -27,34 +27,18 @@ defmodule FastXlsxExporter.Sheet.ColumnIds do
     "W",
     "X",
     "Y",
-    "Z",
-    "AA",
-    "BB",
-    "CC",
-    "DD",
-    "EE",
-    "FF",
-    "GG",
-    "HH",
-    "II",
-    "JJ",
-    "KK",
-    "LL",
-    "MM",
-    "NN",
-    "OO",
-    "PP",
-    "QQ",
-    "RR",
-    "SS",
-    "TT",
-    "UU",
-    "VV",
-    "WW",
-    "XX",
-    "YY",
-    "ZZ"
+    "Z"
   ]
+
+  @double_letters Enum.reduce(@letters, [], fn letter, columns ->
+                    columns ++ Enum.map(@letters, &"#{letter}#{&1}")
+                  end)
+
+  @triple_letters Enum.reduce(@double_letters, [], fn letter, columns ->
+                    columns ++ Enum.map(@letters, &"#{letter}#{&1}")
+                  end)
+
+  @column_ids @letters ++ @double_letters ++ @triple_letters
 
   def column_ids, do: @column_ids
 end
