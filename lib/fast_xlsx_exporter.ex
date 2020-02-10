@@ -9,7 +9,7 @@ defmodule FastXlsxExporter do
   ```elixir
   def deps do
     [
-      {:fast_xlsx_exporter, "~> 0.1.0"}
+      {:fast_xlsx_exporter, "~> 0.1.1"}
     ]
   end
   ```
