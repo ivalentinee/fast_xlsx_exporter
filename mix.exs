@@ -11,7 +11,14 @@ defmodule FastXlsxExporter.MixProject do
       deps: deps(),
       package: package(),
       docs: docs(),
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -39,6 +46,7 @@ defmodule FastXlsxExporter.MixProject do
     [
       {:xlsxir, "~> 1.6.4", only: [:dev, :test], optional: true, runtime: false},
       {:credo, "~> 1.3", only: [:dev, :test], optional: true, runtime: false},
+      {:excoveralls, "~> 0.10", only: :test, optional: true},
       {:ex_doc, "~> 0.21", only: :dev, optional: true, runtime: false}
     ]
   end

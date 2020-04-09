@@ -1,0 +1,15 @@
+language: elixir
+elixir: '1.8.0'
+
+env:
+  - MIX_ENV: test
+
+install:
+  - mix local.hex --force
+  - mix deps.get
+  - mix local.rebar --force
+
+script:
+  - mix format --check-formatted
+  - mix coveralls.travis
+  - mix credo
