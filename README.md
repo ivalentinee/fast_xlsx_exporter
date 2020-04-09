@@ -28,9 +28,45 @@ count = Enum.count(rows)
 
 context = FastXlsxExporter.initialize(count, head)
 context = Enum.reduce(rows, context, &FastXlsxExporter.put_row/2)
-FastXlsxExporter.finalize(context)
+{:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
+File.write("/home/george/failures.xlsx", document)
 ```
 
 See? Really simple thing, nothing special.
 
 If you're looking for something that really supports xlsx, go with [elixlsx](https://github.com/xou/elixlsx).
+
+## Supported cell values
+
+### Numbers
+Both `float` and `integer values are supported and special form of `{<number>, :percent}` to write number as xlsx percent.
+
+Example row:
+```elixir
+[1, 12.5, {59, :percent}]
+```
+
+### Strings
+Strings could be written in two ways.
+
+First one is straight (no special form). In this case strings are written sequentially to **shared strings**, which is RAM-friendly but bloats resulting xlsx file.
+
+Second one requires special form of `{<string>, :dictionary}`. In this case strings are put into dictionary and are written into **shared strings** only once, but are stored in memory, which is good for limited set of values but can cause `OOMKilled` if strings are *random*.
+
+Example rows:
+```elixir
+# first row
+["Vladimir Putin", "Donald Trump", "Literally Hitler"]
+# second row
+[{"some_string", :dictionary}, {"some_other_string", :dictionary}, {"some_string", :dictionary}]
+# third row
+["wow!", {"some_other_string", :dictionary}, "yay!"]
+```
+
+### Date and time
+Both `%Date{}` and `%NaiveDateTime{}` are rendered as dates (not strings).
+
+Example row:
+```elixir
+[~D[1905-12-11], ~D[2020-04-09], ~N[2020-04-09 12:00:00]]
+```
