@@ -3,7 +3,7 @@ defmodule FastXlsxExporter.Sheet.DateTimeFormatter do
 
   @initial_date ~D[1900-01-01]
   @initial_time ~T[00:00:00]
-  @seconds_per_day 86400
+  @seconds_per_day 86_400
 
   def format_date(%Date{} = value) do
     date_chunk = Date.diff(value, @initial_date)
