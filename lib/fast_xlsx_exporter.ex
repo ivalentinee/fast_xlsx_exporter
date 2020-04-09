@@ -9,7 +9,7 @@ defmodule FastXlsxExporter do
   ```elixir
   def deps do
     [
-      {:fast_xlsx_exporter, "~> 0.1.2"}
+      {:fast_xlsx_exporter, "~> 0.1.3"}
     ]
   end
   ```
@@ -39,7 +39,7 @@ defmodule FastXlsxExporter do
   ## Supported cell values
 
   ### Numbers
-  Both `float` and `integer values are supported and special form of `{<number>, :percent}` to write number as xlsx percent.
+  Both `float` and `integer` values are supported and special form of `{<number>, :percent}` to write number as xlsx percent.
 
   Example row:
   ```elixir

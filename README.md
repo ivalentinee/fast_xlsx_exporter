@@ -1,7 +1,7 @@
 # Fast XLSX Exporter
 [![Build Status](https://travis-ci.org/ivalentinee/fast_xlsx_exporter.svg?branch=master)](https://travis-ci.org/ivalentinee/fast_xlsx_exporter)
 [![Coverage Status](https://coveralls.io/repos/github/ivalentinee/fast_xlsx_exporter/badge.svg?branch=master)](https://coveralls.io/github/ivalentinee/fast_xlsx_exporter?branch=master)
-[![Hex pm](https://img.shields.io/hexpm/v/fast_xlsx_exporter.svg?style=flat)](https://hex.pm/packages/fast_xlsx_exporter)
+[![Hex pm](https://img.shields.io/hexpm/v/fast_xlsx_exporter.svg)](https://hex.pm/packages/fast_xlsx_exporter)
 
 ## Installation
 
@@ -10,7 +10,7 @@ Add `fast_xlsx_exporter` to your mix.ex deps:
 ```elixir
 def deps do
   [
-    {:fast_xlsx_exporter, "~> 0.1.2"}
+    {:fast_xlsx_exporter, "~> 0.1.3"}
   ]
 end
 ```
@@ -39,7 +39,7 @@ If you're looking for something that really supports xlsx, go with [elixlsx](htt
 ## Supported cell values
 
 ### Numbers
-Both `float` and `integer values are supported and special form of `{<number>, :percent}` to write number as xlsx percent.
+Both `float` and `integer` values are supported and special form of `{<number>, :percent}` to write number as xlsx percent.
 
 Example row:
 ```elixir
