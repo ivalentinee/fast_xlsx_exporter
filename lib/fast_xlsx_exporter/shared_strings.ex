@@ -15,22 +15,38 @@ defmodule FastXlsxExporter.SharedStrings do
     :file.truncate(fd)
     strings_start = render_start()
     :file.write(fd, strings_start)
-    {fd, 0}
+    count = 0
+    dictionary = %{}
+    {fd, count, dictionary}
   end
 
-  def finalize({fd, _}) do
+  def finalize({fd, _, _}) do
     strings_end = render_end()
     :file.write(fd, strings_end)
     :file.close(fd)
   end
 
-  def write_string(value, {fd, count}) when is_binary(value) do
-    string = render_value(escape(value))
-    :file.write(fd, string)
-    {to_string(count), {fd, count + 1}}
+  def write_string({value, :dictionary}, {fd, count, dictionary}) when is_binary(value) do
+    if index = dictionary[value] do
+      {index, {fd, count, dictionary}}
+    else
+      write_shared_string(value, fd)
+      new_dictionary = Map.put(dictionary, value, to_string(count))
+      {to_string(count), {fd, count + 1, new_dictionary}}
+    end
   end
 
-  def shared_string?(value), do: is_binary(value)
+  def write_string({value, _}, {fd, count, dictionary}) when is_binary(value) do
+    write_shared_string(value, fd)
+    {to_string(count), {fd, count + 1, dictionary}}
+  end
+
+  def shared_string?({value, _format}), do: is_binary(value)
+
+  defp write_shared_string(value, fd) do
+    string = render_value(escape(value))
+    :file.write(fd, string)
+  end
 
   defp fd(base_path) do
     sheet_path = Path.join(base_path, @path)

@@ -48,9 +48,9 @@ defmodule FastXlsxExporter.Sheet do
 
   defp write_cell(row_number, {{value, format}, column_index}, {content, shared_strings_context}) do
     if value && value != "" do
-      if SharedStrings.shared_string?(value) do
+      if SharedStrings.shared_string?({value, format}) do
         {value, new_shared_string_context} =
-          SharedStrings.write_string(value, shared_strings_context)
+          SharedStrings.write_string({value, format}, shared_strings_context)
 
         {
           content <> cell(row_number, column_index, {value, format}),

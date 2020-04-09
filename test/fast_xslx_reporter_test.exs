@@ -60,4 +60,26 @@ defmodule FastXlsxExporterTest do
     assert 2 = Enum.count(rows)
     assert [{1905, 12, 11}, {2020, 4, 9}, ~N[2020-04-09 12:00:00]] == Enum.at(rows, 1)
   end
+
+  test "writes dictionary strings" do
+    head = ["column1", "column2", "column3"]
+
+    first_row = [
+      {"some_string", :dictionary},
+      {"some_other_string", :dictionary},
+      {"some_string", :dictionary}
+    ]
+
+    second_row = ["wow!", {"some_other_string", :dictionary}, "yay!"]
+
+    context = FastXlsxExporter.initialize(2, head)
+    context = FastXlsxExporter.put_row(first_row, context)
+    context = FastXlsxExporter.put_row(second_row, context)
+    {:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
+
+    rows = XlsxReader.read_document(document)
+    assert 3 = Enum.count(rows)
+    assert ["some_string", "some_other_string", "some_string"] == Enum.at(rows, 1)
+    assert ["wow!", "some_other_string", "yay!"] == Enum.at(rows, 2)
+  end
 end
