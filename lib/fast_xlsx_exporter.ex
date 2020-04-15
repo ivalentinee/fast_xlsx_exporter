@@ -26,7 +26,7 @@ defmodule FastXlsxExporter do
 
   context = FastXlsxExporter.initialize()
   context = Enum.reduce(rows, context, &FastXlsxExporter.put_row/2)
-  {:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
+  {:ok, document} = FastXlsxExporter.finalize(context)
   File.write("/home/george/failures.xlsx", document)
   ```
 

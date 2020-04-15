@@ -25,7 +25,7 @@ rows = [[1, 2, 3, 10], [4, 5, 6], [7, 8, 9]]
 
 context = FastXlsxExporter.initialize()
 context = Enum.reduce(rows, context, &FastXlsxExporter.put_row/2)
-{:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
+{:ok, document} = FastXlsxExporter.finalize(context)
 File.write("/home/george/failures.xlsx", document)
 ```
 
