@@ -18,15 +18,15 @@ defmodule FastXlsxExporter.Sheet do
   @type row() :: list(cell())
 
   EEx.function_from_file(:defp, :render_row, "#{__DIR__}/sheet/row.xml.eex", [:index, :content])
-  EEx.function_from_file(:defp, :render_start, "#{__DIR__}/sheet/start.xml.eex", [:dimensions])
+  EEx.function_from_file(:defp, :render_start, "#{__DIR__}/sheet/start.xml.eex", [])
   EEx.function_from_file(:defp, :render_end, "#{__DIR__}/sheet/end.xml.eex", [])
 
   @doc false
-  @spec initialize(binary(), integer(), integer()) :: any()
-  def initialize(base_path, row_count, column_count) do
+  @spec initialize(binary()) :: any()
+  def initialize(base_path) do
     {:ok, fd} = fd(base_path)
     :file.truncate(fd)
-    sheet_start = render_start(dimensions_string({row_count, column_count}))
+    sheet_start = render_start()
     :file.write(fd, sheet_start)
     Styles.write(base_path)
     written_row_count = 0
@@ -57,12 +57,6 @@ defmodule FastXlsxExporter.Sheet do
 
     :file.write(fd, row)
     {{fd, new_row_number}, shared_strings_context}
-  end
-
-  defp dimensions_string({row_count, column_count}) do
-    top_left = "A1"
-    bottom_right = id(row_count, column_count)
-    "#{top_left}:#{bottom_right}"
   end
 
   defp write_cell(

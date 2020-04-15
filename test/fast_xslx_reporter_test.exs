@@ -8,7 +8,7 @@ defmodule FastXlsxExporterTest do
     first_row = ["value 1", "value 2", "value 3"]
     second_row = ["value 4", "value 5"]
 
-    context = FastXlsxExporter.initialize(2, 3)
+    context = FastXlsxExporter.initialize()
     context = FastXlsxExporter.put_row(first_row, context)
     context = FastXlsxExporter.put_row(second_row, context)
     {:ok, document} = FastXlsxExporter.finalize(context)
@@ -23,7 +23,7 @@ defmodule FastXlsxExporterTest do
     first_row = [1, 2, 3]
     second_row = [4, {5, :percents}]
 
-    context = FastXlsxExporter.initialize(2, 3)
+    context = FastXlsxExporter.initialize()
     context = FastXlsxExporter.put_row(first_row, context)
     context = FastXlsxExporter.put_row(second_row, context)
     {:ok, document} = FastXlsxExporter.finalize(context)
@@ -37,7 +37,7 @@ defmodule FastXlsxExporterTest do
   test "writes date and time to document" do
     row = [~D[1905-12-11], ~D[2020-04-09], ~N[2020-04-09 12:00:00]]
 
-    context = FastXlsxExporter.initialize(1, 3)
+    context = FastXlsxExporter.initialize()
     context = FastXlsxExporter.put_row(row, context)
     {:ok, document} = FastXlsxExporter.finalize(context)
 
@@ -55,7 +55,7 @@ defmodule FastXlsxExporterTest do
 
     second_row = ["wow!", {"some_other_string", :dictionary}, "yay!"]
 
-    context = FastXlsxExporter.initialize(2, 3)
+    context = FastXlsxExporter.initialize()
     context = FastXlsxExporter.put_row(first_row, context)
     context = FastXlsxExporter.put_row(second_row, context)
     {:ok, document} = FastXlsxExporter.finalize(context)

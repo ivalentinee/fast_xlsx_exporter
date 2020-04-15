@@ -23,11 +23,8 @@ defmodule FastXlsxExporter do
   Some example:
   ```elixir
   rows = [[1, 2, 3, 10], [4, 5, 6], [7, 8, 9]]
-  count = Enum.count(rows)
 
-  row_count = 3
-  column_count = 4
-  context = FastXlsxExporter.initialize(row_count, column_count)
+  context = FastXlsxExporter.initialize()
   context = Enum.reduce(rows, context, &FastXlsxExporter.put_row/2)
   {:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
   File.write("/home/george/failures.xlsx", document)
@@ -82,16 +79,15 @@ defmodule FastXlsxExporter do
 
   Creates temporary export directory at `System.tmp_dir!()`, writes common files and content file header
   """
-  @spec initialize(integer(), integer()) :: context()
-  def initialize(total_columns, total_rows)
-      when is_integer(total_columns) and is_integer(total_rows) do
+  @spec initialize() :: context()
+  def initialize do
     :random.seed()
     temp_name = "xlsx_#{:rand.uniform(1_000_000_000)}"
     dir = Path.join(System.tmp_dir!(), temp_name)
     File.rm_rf!(dir)
     File.mkdir!(dir)
     FastXlsxExporter.Sample.write(dir)
-    sheet_context = Sheet.initialize(dir, total_columns, total_rows)
+    sheet_context = Sheet.initialize(dir)
 
     {dir, sheet_context}
   end

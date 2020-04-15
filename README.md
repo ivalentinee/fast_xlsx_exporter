@@ -23,11 +23,8 @@ So, being really primitive (8 hour at night from scratch knowing nothing about x
 Some example:
 ```elixir
 rows = [[1, 2, 3, 10], [4, 5, 6], [7, 8, 9]]
-count = Enum.count(rows)
 
-row_count = 3
-column_count = 4
-context = FastXlsxExporter.initialize(row_count, column_count)
+context = FastXlsxExporter.initialize()
 context = Enum.reduce(rows, context, &FastXlsxExporter.put_row/2)
 {:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
 File.write("/home/george/failures.xlsx", document)
