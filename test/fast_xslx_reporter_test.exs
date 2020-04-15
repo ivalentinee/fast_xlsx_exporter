@@ -4,6 +4,11 @@ defmodule FastXlsxExporterTest do
 
   alias FastXlsxExporter.XlsxReader
 
+  setup do
+    XlsxReader.create_temp_file_dir()
+    on_exit(fn -> XlsxReader.remove_temp_file_dir() end)
+  end
+
   test "writes strings to document" do
     first_row = ["value 1", "value 2", "value 3"]
     second_row = ["value 4", "value 5"]
@@ -14,6 +19,23 @@ defmodule FastXlsxExporterTest do
     {:ok, document} = FastXlsxExporter.finalize(context)
 
     rows = XlsxReader.read_document(document)
+    assert 2 = Enum.count(rows)
+    assert first_row == Enum.at(rows, 0)
+    assert second_row == Enum.at(rows, 1)
+  end
+
+  test "writes strings to file" do
+    first_row = ["value 1", "value 2", "value 3"]
+    second_row = ["value 4", "value 5"]
+
+    context = FastXlsxExporter.initialize()
+    context = FastXlsxExporter.put_row(first_row, context)
+    context = FastXlsxExporter.put_row(second_row, context)
+    {:ok, filename} = FastXlsxExporter.finalize_to_file(context, XlsxReader.random_file_path())
+
+    rows = XlsxReader.read_file(filename)
+    XlsxReader.delete_file(filename)
+
     assert 2 = Enum.count(rows)
     assert first_row == Enum.at(rows, 0)
     assert second_row == Enum.at(rows, 1)

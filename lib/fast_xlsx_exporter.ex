@@ -101,20 +101,33 @@ defmodule FastXlsxExporter do
   end
 
   @doc """
-  Finalizes export
+  Finalizes export and returns xlsx file binary
 
   Removes temporary directory, closes file descriptors
   """
   @spec finalize(context()) :: {:ok, binary()} | {:error, reason :: charlist()}
   def finalize({dir, sheet_context}) do
     Sheet.finalize(sheet_context)
-    archive = :zip.create("file.xlsx", list_files(dir), [:memory, cwd: to_charlist(dir)])
+    archive_result = :zip.create("file.xlsx", list_files(dir), [:memory, cwd: to_charlist(dir)])
     File.rm_rf!(dir)
 
-    case archive do
+    case archive_result do
       {:ok, {_filename, content}} -> {:ok, content}
       error -> error
     end
+  end
+
+  @doc """
+  Finalizes export and writes result to file
+
+  Removes temporary directory, closes file descriptors
+  """
+  @spec finalize_to_file(context(), binary()) :: {:ok, binary()} | {:error, reason :: charlist()}
+  def finalize_to_file({dir, sheet_context}, filename) do
+    Sheet.finalize(sheet_context)
+    archive_result = :zip.create(filename, list_files(dir), cwd: to_charlist(dir))
+    File.rm_rf!(dir)
+    archive_result
   end
 
   defp list_files(path) do
