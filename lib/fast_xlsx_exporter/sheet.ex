@@ -1,4 +1,6 @@
 defmodule FastXlsxExporter.Sheet do
+  @moduledoc nil
+
   require EEx
   import FastXlsxExporter.Sheet.ColumnIds
   alias FastXlsxExporter.{SharedStrings, Sheet.Cell, Styles}
@@ -20,20 +22,16 @@ defmodule FastXlsxExporter.Sheet do
   EEx.function_from_file(:defp, :render_end, "#{__DIR__}/sheet/end.xml.eex", [])
 
   @doc false
-  @spec initialize(binary(), [binary()], integer()) :: any()
-  def initialize(base_path, head, count) do
+  @spec initialize(binary(), integer(), integer()) :: any()
+  def initialize(base_path, row_count, column_count) do
     {:ok, fd} = fd(base_path)
     :file.truncate(fd)
-    top_left = "A1"
-    bottom_right = id(count, Enum.count(head))
-    dimensions = "#{top_left}:#{bottom_right}"
-    sheet_start = render_start(dimensions)
+    sheet_start = render_start(dimensions_string({row_count, column_count}))
     :file.write(fd, sheet_start)
-    row_count = 0
-    shared_strings_context = SharedStrings.initialize(base_path)
     Styles.write(base_path)
-    context = {{fd, row_count}, shared_strings_context}
-    write_row(head, context)
+    written_row_count = 0
+    shared_strings_context = SharedStrings.initialize(base_path)
+    {{fd, written_row_count}, shared_strings_context}
   end
 
   @doc false
@@ -59,6 +57,12 @@ defmodule FastXlsxExporter.Sheet do
 
     :file.write(fd, row)
     {{fd, new_row_number}, shared_strings_context}
+  end
+
+  defp dimensions_string({row_count, column_count}) do
+    top_left = "A1"
+    bottom_right = id(row_count, column_count)
+    "#{top_left}:#{bottom_right}"
   end
 
   defp write_cell(
