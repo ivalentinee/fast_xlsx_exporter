@@ -35,7 +35,7 @@ defmodule FastXlsxExporterTest do
   end
 
   test "writes date and time to document" do
-    row = [~D[1905-12-11], ~D[2020-04-09], ~N[2020-04-09 12:00:00]]
+    row = [~D[1900-01-10], ~D[2020-04-09], ~N[2020-04-09 12:00:00]]
 
     context = FastXlsxExporter.initialize()
     context = FastXlsxExporter.put_row(row, context)
@@ -43,7 +43,7 @@ defmodule FastXlsxExporterTest do
 
     rows = XlsxReader.read_document(document)
     assert 1 = Enum.count(rows)
-    assert [{1905, 12, 11}, {2020, 4, 9}, ~N[2020-04-09 12:00:00]] == Enum.at(rows, 0)
+    assert [{1900, 01, 10}, {2020, 4, 9}, ~N[2020-04-09 12:00:00]] == Enum.at(rows, 0)
   end
 
   test "writes dictionary strings" do

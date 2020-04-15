@@ -8,11 +8,7 @@ defmodule FastXlsxExporter.Sheet.DateTimeFormatter do
   def format_date(%Date{} = value) do
     date_chunk = Date.diff(value, @initial_date)
 
-    if lotus_leap_year_bug?(date_chunk) do
-      2 + date_chunk
-    else
-      1 + date_chunk
-    end
+    2 + date_chunk
   end
 
   def format_datetime(%NaiveDateTime{} = value) do
@@ -22,6 +18,4 @@ defmodule FastXlsxExporter.Sheet.DateTimeFormatter do
 
     format_date(date) + time_chunk
   end
-
-  defp lotus_leap_year_bug?(date_chunk), do: date_chunk >= 59
 end
