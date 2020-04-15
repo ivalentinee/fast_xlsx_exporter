@@ -39,11 +39,11 @@ defmodule FastXlsxExporter do
   ## Supported cell values
 
   ### Numbers
-  Both `float` and `integer` values are supported and special form of `{<float>, :percent}` to write number as xlsx percent.
+  Both `float` and `integer` values are supported and special form of `{<float>, :percents}` to write number as xlsx percent.
 
   Example row:
   ```elixir
-  [1, 12.5, {0.59, :percent}]
+  [1, 12.5, {0.59, :percents}]
   ```
 
   ### Strings
@@ -75,7 +75,7 @@ defmodule FastXlsxExporter do
   alias FastXlsxExporter.Sheet
 
   @type context() :: any()
-  @type cell() :: binary() | number() | {number(), :percent}
+  @type cell() :: binary() | number() | {number(), :percents} | {binary(), :dictionary} | %Date{} | %NaiveDateTime{}
   @type row() :: list(cell())
   @type filename() :: charlist()
   @type file() :: binary()
