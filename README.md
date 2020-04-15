@@ -1,7 +1,6 @@
 # Fast XLSX Exporter
 [![Build Status](https://travis-ci.org/ivalentinee/fast_xlsx_exporter.svg?branch=master)](https://travis-ci.org/ivalentinee/fast_xlsx_exporter)
 [![Coverage Status](https://coveralls.io/repos/github/ivalentinee/fast_xlsx_exporter/badge.svg?branch=master)](https://coveralls.io/github/ivalentinee/fast_xlsx_exporter?branch=master)
-[![Hex pm](https://img.shields.io/hexpm/v/fast_xlsx_exporter.svg)](https://hex.pm/packages/fast_xlsx_exporter)
 
 ## Installation
 
