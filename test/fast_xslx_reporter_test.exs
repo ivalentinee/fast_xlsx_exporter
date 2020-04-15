@@ -7,7 +7,7 @@ defmodule FastXlsxExporterTest do
   test "writes head to document" do
     head = ["column1", "column2", "column3"]
 
-    {:ok, {_filename, document}} =
+    {:ok, document} =
       FastXlsxExporter.initialize(0, head)
       |> FastXlsxExporter.finalize()
 
@@ -24,7 +24,7 @@ defmodule FastXlsxExporterTest do
     context = FastXlsxExporter.initialize(2, head)
     context = FastXlsxExporter.put_row(first_row, context)
     context = FastXlsxExporter.put_row(second_row, context)
-    {:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
+    {:ok, document} = FastXlsxExporter.finalize(context)
 
     rows = XlsxReader.read_document(document)
     assert 3 = Enum.count(rows)
@@ -40,7 +40,7 @@ defmodule FastXlsxExporterTest do
     context = FastXlsxExporter.initialize(2, head)
     context = FastXlsxExporter.put_row(first_row, context)
     context = FastXlsxExporter.put_row(second_row, context)
-    {:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
+    {:ok, document} = FastXlsxExporter.finalize(context)
 
     rows = XlsxReader.read_document(document)
     assert 3 = Enum.count(rows)
@@ -54,7 +54,7 @@ defmodule FastXlsxExporterTest do
 
     context = FastXlsxExporter.initialize(2, head)
     context = FastXlsxExporter.put_row(row, context)
-    {:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
+    {:ok, document} = FastXlsxExporter.finalize(context)
 
     rows = XlsxReader.read_document(document)
     assert 2 = Enum.count(rows)
@@ -75,7 +75,7 @@ defmodule FastXlsxExporterTest do
     context = FastXlsxExporter.initialize(2, head)
     context = FastXlsxExporter.put_row(first_row, context)
     context = FastXlsxExporter.put_row(second_row, context)
-    {:ok, {_filename, document}} = FastXlsxExporter.finalize(context)
+    {:ok, document} = FastXlsxExporter.finalize(context)
 
     rows = XlsxReader.read_document(document)
     assert 3 = Enum.count(rows)

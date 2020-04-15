@@ -3,6 +3,9 @@ defmodule FastXlsxExporter.SharedStrings do
 
   require EEx
 
+  @type dictionary() :: %{binary() => integer()}
+  @type shared_strings_context() :: {{:file.io_device(), integer()}, dictionary()}
+
   @path Path.join(["xl", "sharedStrings.xml"])
 
   EEx.function_from_file(:defp, :render_start, "#{__DIR__}/shared_strings/start.xml.eex", [])
@@ -15,9 +18,9 @@ defmodule FastXlsxExporter.SharedStrings do
     :file.truncate(fd)
     strings_start = render_start()
     :file.write(fd, strings_start)
-    count = 0
+    shared_string_count = 0
     dictionary = %{}
-    {fd, count, dictionary}
+    {fd, shared_string_count, dictionary}
   end
 
   def finalize({fd, _, _}) do

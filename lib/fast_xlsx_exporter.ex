@@ -74,18 +74,12 @@ defmodule FastXlsxExporter do
 
   alias FastXlsxExporter.Sheet
 
-  @type context() :: any()
-  @type cell() :: binary() | number() | {number(), :percents} | {binary(), :dictionary} | %Date{} | %NaiveDateTime{}
-  @type row() :: list(cell())
-  @type filename() :: charlist()
-  @type file() :: binary()
-
   @doc """
   Initializes export
 
   Creates temporary export directory at `System.tmp_dir!()`, writes common files and content file header
   """
-  @spec initialize(integer(), list(binary)) :: context()
+  @spec initialize(integer(), list(binary)) :: Sheet.context()
   def initialize(count, head) do
     :random.seed()
     temp_name = "xlsx_#{:rand.uniform(1_000_000_000)}"
@@ -101,7 +95,7 @@ defmodule FastXlsxExporter do
   @doc """
   Adds row to document
   """
-  @spec put_row(row(), context()) :: context()
+  @spec put_row(Sheet.row(), Sheet.context()) :: Sheet.context()
   def put_row(row, {dir, sheet_context}) when is_list(row) do
     {dir, Sheet.write_row(row, sheet_context)}
   end
@@ -111,12 +105,16 @@ defmodule FastXlsxExporter do
 
   Removes temporary directory, closes file descriptors
   """
-  @spec finalize(context()) :: {:ok, filename(), file()} | {:error, reason :: charlist()}
+  @spec finalize(Sheet.context()) :: {:ok, binary()} | {:error, reason :: charlist()}
   def finalize({dir, sheet_context}) do
     Sheet.finalize(sheet_context)
     archive = :zip.create("file.xlsx", list_files(dir), [:memory, cwd: to_charlist(dir)])
     File.rm_rf!(dir)
-    archive
+
+    case archive do
+      {:ok, {_filename, content}} -> {:ok, content}
+      error -> error
+    end
   end
 
   defp list_files(path) do

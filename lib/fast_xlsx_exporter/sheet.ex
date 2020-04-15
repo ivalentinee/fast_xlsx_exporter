@@ -1,16 +1,26 @@
 defmodule FastXlsxExporter.Sheet do
-  @moduledoc false
-
   require EEx
   import FastXlsxExporter.Sheet.ColumnIds
   alias FastXlsxExporter.{SharedStrings, Sheet.Cell, Styles}
 
   @path Path.join(["xl", "worksheets", "sheet1.xml"])
 
+  @type context() :: {{:file.io_device(), integer()}, SharedStrings.shared_strings_context()}
+  @type cell() ::
+          binary()
+          | number()
+          | {number(), :percents}
+          | {binary(), :dictionary}
+          | %Date{}
+          | %NaiveDateTime{}
+  @type row() :: list(cell())
+
   EEx.function_from_file(:defp, :render_row, "#{__DIR__}/sheet/row.xml.eex", [:index, :content])
   EEx.function_from_file(:defp, :render_start, "#{__DIR__}/sheet/start.xml.eex", [:dimensions])
   EEx.function_from_file(:defp, :render_end, "#{__DIR__}/sheet/end.xml.eex", [])
 
+  @doc false
+  @spec initialize(binary(), [binary()], integer()) :: any()
   def initialize(base_path, head, count) do
     {:ok, fd} = fd(base_path)
     :file.truncate(fd)
@@ -19,12 +29,15 @@ defmodule FastXlsxExporter.Sheet do
     dimensions = "#{top_left}:#{bottom_right}"
     sheet_start = render_start(dimensions)
     :file.write(fd, sheet_start)
+    row_count = 0
     shared_strings_context = SharedStrings.initialize(base_path)
     Styles.write(base_path)
-    context = {{fd, 0}, shared_strings_context}
+    context = {{fd, row_count}, shared_strings_context}
     write_row(head, context)
   end
 
+  @doc false
+  @spec finalize(context()) :: any()
   def finalize({{fd, _row_count}, shared_strings_context}) do
     sheet_end = render_end()
     :file.write(fd, sheet_end)
@@ -32,6 +45,8 @@ defmodule FastXlsxExporter.Sheet do
     SharedStrings.finalize(shared_strings_context)
   end
 
+  @doc false
+  @spec write_row(row(), context()) :: context()
   def write_row(values, {{fd, row_count}, shared_strings_context}) do
     new_row_number = row_count + 1
 
@@ -46,24 +61,28 @@ defmodule FastXlsxExporter.Sheet do
     {{fd, new_row_number}, shared_strings_context}
   end
 
-  defp write_cell(row_number, {{value, format}, column_index}, {content, shared_strings_context}) do
+  defp write_cell(
+         row_number,
+         {{value, format}, column_index},
+         {row_string, shared_strings_context}
+       ) do
     if value && value != "" do
       if SharedStrings.shared_string?({value, format}) do
         {value, new_shared_string_context} =
           SharedStrings.write_string({value, format}, shared_strings_context)
 
         {
-          content <> cell(row_number, column_index, {value, format}),
+          row_string <> cell(row_number, column_index, {value, format}),
           new_shared_string_context
         }
       else
         {
-          content <> cell(row_number, column_index, {value, format}),
+          row_string <> cell(row_number, column_index, {value, format}),
           shared_strings_context
         }
       end
     else
-      {content, shared_strings_context}
+      {row_string, shared_strings_context}
     end
   end
 
