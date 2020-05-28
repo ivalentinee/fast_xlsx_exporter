@@ -43,7 +43,7 @@ defmodule FastXlsxExporterTest do
 
   test "writes numbers to document" do
     first_row = [1, 2, 3]
-    second_row = [4, {5, :percents}]
+    second_row = [4, {5, :percents}, {nil, :percents}]
 
     context = FastXlsxExporter.initialize()
     context = FastXlsxExporter.put_row(first_row, context)
@@ -72,7 +72,8 @@ defmodule FastXlsxExporterTest do
     first_row = [
       {"some_string", :dictionary},
       {"some_other_string", :dictionary},
-      {"some_string", :dictionary}
+      {"some_string", :dictionary},
+      {nil, :dictionary}
     ]
 
     second_row = ["wow!", {"some_other_string", :dictionary}, "yay!"]
