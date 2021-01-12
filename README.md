@@ -1,5 +1,5 @@
 # Fast XLSX Exporter
-[![Build Status](https://travis-ci.org/ivalentinee/fast_xlsx_exporter.svg?branch=master)](https://travis-ci.org/ivalentinee/fast_xlsx_exporter)
+[![Build Status](https://travis-ci.com/ivalentinee/fast_xlsx_exporter.svg?branch=master)](https://travis-ci.org/ivalentinee/fast_xlsx_exporter)
 [![Coverage Status](https://coveralls.io/repos/github/ivalentinee/fast_xlsx_exporter/badge.svg?branch=master)](https://coveralls.io/github/ivalentinee/fast_xlsx_exporter?branch=master)
 
 [Hex version docs](https://hexdocs.pm/fast_xlsx_exporter/)
