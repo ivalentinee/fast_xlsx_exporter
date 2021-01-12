@@ -11,7 +11,7 @@ Add `fast_xlsx_exporter` to your mix.ex deps:
 ```elixir
 def deps do
   [
-    {:fast_xlsx_exporter, "~> 0.2.1"}
+    {:fast_xlsx_exporter, "~> 0.2.2"}
   ]
 end
 ```

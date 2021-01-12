@@ -1,5 +1,5 @@
 defmodule FastXlsxExporter.Sheet do
-  @moduledoc false
+  @moduledoc nil
 
   require EEx
   import FastXlsxExporter.Sheet.ColumnIds
