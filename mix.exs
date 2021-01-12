@@ -36,18 +36,18 @@ defmodule FastXlsxExporter.MixProject do
     ]
   end
 
-  def application do
-    [
-      extra_applications: []
-    ]
-  end
+  def application, do: [extra_applications: extra_applications(Mix.env())]
+
+  defp extra_applications(:test), do: [:eex, :tools]
+  defp extra_applications(_), do: [:eex]
 
   def deps do
     [
       {:xlsxir, "~> 1.6.4", only: [:dev, :test], optional: true, runtime: false},
       {:credo, "~> 1.3", only: [:dev, :test], optional: true, runtime: false},
       {:excoveralls, "~> 0.10", only: :test, optional: true},
-      {:ex_doc, "~> 0.21", only: :dev, optional: true, runtime: false}
+      {:ex_doc, "~> 0.21", only: :dev, optional: true, runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false, override: true}
     ]
   end
 

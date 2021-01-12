@@ -1,9 +1,12 @@
 defmodule FastXlsxExporter.Sheet do
-  @moduledoc nil
+  @moduledoc false
 
   require EEx
   import FastXlsxExporter.Sheet.ColumnIds
-  alias FastXlsxExporter.{SharedStrings, Sheet.Cell, Styles}
+  alias FastXlsxExporter.SharedStrings
+  alias FastXlsxExporter.Sheet.Cell
+  alias FastXlsxExporter.Styles
+  alias FastXlsxExporter.Utils
 
   @path Path.join(["xl", "worksheets", "sheet1.xml"])
 
@@ -22,16 +25,16 @@ defmodule FastXlsxExporter.Sheet do
   EEx.function_from_file(:defp, :render_end, "#{__DIR__}/sheet/end.xml.eex", [])
 
   @doc false
-  @spec initialize(binary()) :: any()
+  @spec initialize(binary()) :: {:ok, context()}
   def initialize(base_path) do
-    {:ok, fd} = fd(base_path)
-    :file.truncate(fd)
+    {:ok, fd} = Utils.open_new_file(base_path, @path)
+    {:ok, shared_strings_context} = SharedStrings.initialize(base_path)
     sheet_start = render_start()
     :file.write(fd, sheet_start)
     Styles.write(base_path)
     written_row_count = 0
-    shared_strings_context = SharedStrings.initialize(base_path)
-    {{fd, written_row_count}, shared_strings_context}
+    context = {{fd, written_row_count}, shared_strings_context}
+    {:ok, context}
   end
 
   @doc false
@@ -91,11 +94,6 @@ defmodule FastXlsxExporter.Sheet do
   defp cell(row_index, column_index, value) do
     id = id(row_index, column_index)
     Cell.render(id, value)
-  end
-
-  defp fd(base_path) do
-    sheet_path = Path.join(base_path, @path)
-    :file.open(to_charlist(sheet_path), [:append])
   end
 
   defp id(row_index, column_index) do

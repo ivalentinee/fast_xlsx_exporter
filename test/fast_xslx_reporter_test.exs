@@ -31,7 +31,8 @@ defmodule FastXlsxExporterTest do
     context = FastXlsxExporter.initialize()
     context = FastXlsxExporter.put_row(first_row, context)
     context = FastXlsxExporter.put_row(second_row, context)
-    {:ok, filename} = FastXlsxExporter.finalize_to_file(context, XlsxReader.random_file_path())
+    filename = XlsxReader.random_file_path()
+    :ok = FastXlsxExporter.finalize_to_file(context, filename)
 
     rows = XlsxReader.read_file(filename)
     XlsxReader.delete_file(filename)

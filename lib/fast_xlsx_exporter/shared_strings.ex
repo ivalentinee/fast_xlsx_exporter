@@ -3,8 +3,10 @@ defmodule FastXlsxExporter.SharedStrings do
 
   require EEx
 
+  alias FastXlsxExporter.Utils
+
   @type dictionary() :: %{binary() => integer()}
-  @type shared_strings_context() :: {{:file.io_device(), integer()}, dictionary()}
+  @type shared_strings_context() :: {:file.io_device(), integer(), dictionary()}
 
   @path Path.join(["xl", "sharedStrings.xml"])
 
@@ -13,14 +15,15 @@ defmodule FastXlsxExporter.SharedStrings do
 
   EEx.function_from_file(:defp, :render_value, "#{__DIR__}/shared_strings/value.xml.eex", [:value])
 
+  @spec initialize(binary()) :: {:ok, shared_strings_context()}
   def initialize(base_path) do
-    {:ok, fd} = fd(base_path)
-    :file.truncate(fd)
+    {:ok, fd} = Utils.open_new_file(base_path, @path)
     strings_start = render_start()
     :file.write(fd, strings_start)
     shared_string_count = 0
     dictionary = %{}
-    {fd, shared_string_count, dictionary}
+    shared_strings_context = {fd, shared_string_count, dictionary}
+    {:ok, shared_strings_context}
   end
 
   def finalize({fd, _, _}) do
@@ -49,11 +52,6 @@ defmodule FastXlsxExporter.SharedStrings do
   defp write_shared_string(value, fd) do
     string = render_value(escape(value))
     :file.write(fd, string)
-  end
-
-  defp fd(base_path) do
-    sheet_path = Path.join(base_path, @path)
-    :file.open(to_charlist(sheet_path), [:append])
   end
 
   defp escape(value) do
